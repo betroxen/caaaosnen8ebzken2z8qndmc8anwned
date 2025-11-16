@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZAP // TACTICAL DATA ARCHITECT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'foundation': '#0A0A0A',
+              'foundation-light': '#141414',
+              'foundation-lighter': '#1E1E1E',
+              'neon-surge': '#00FFC0',
+              'text-primary': '#FFFFFF',
+              'text-secondary': '#A0A0A0',
+              'text-tertiary': '#666666',
+              'warning-low': '#FFB800',
+              'warning-high': '#FF3333',
+            },
+            fontFamily: {
+              orbitron: ['Orbitron', 'sans-serif'],
+              'roboto-mono': ['Roboto Mono', 'monospace'],
+              'rajdhani': ['Rajdhani', 'sans-serif'],
+              'jetbrains-mono': ['JetBrains Mono', 'monospace'],
+            },
+            keyframes: {
+              glow: {
+                'from': { textShadow: '0 0 10px rgba(0,255,192,0.5), 0 0 20px rgba(0,255,192,0.5)' },
+                'to': { textShadow: '0 0 20px rgba(0,255,192,1), 0 0 30px rgba(0,255,192,1)' },
+              },
+              'pulse-glow': {
+                '0%, 100%': { opacity: 0.5 },
+                '50%': { opacity: 1 },
+              },
+               'pulse-glow-shadow': {
+                '0%, 100%': { boxShadow: '0 0 10px rgba(0, 255, 192, 0.2), 0 0 20px rgba(0, 255, 192, 0.0)' },
+                '50%': { boxShadow: '0 0 30px rgba(0, 255, 192, 0.4), 0 0 50px rgba(0, 255, 192, 0.1)' },
+              },
+              scanline: {
+                '0%': { transform: 'translateY(-10%)', opacity: 0 },
+                '10%, 90%': { opacity: 0.05 },
+                '100%': { transform: 'translateY(110%)', opacity: 0 },
+              },
+              'scan-line': {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              'scanline-bg': {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '0 100%' },
+              },
+              shimmer: {
+                '100%': { transform: 'translateX(100%)' },
+              },
+              fadeIn: {
+                'from': { opacity: 0, transform: 'translateY(10px)' },
+                'to': { opacity: 1, transform: 'translateY(0)' },
+              },
+              tabSlideIn: {
+                'from': { opacity: 0, transform: 'translateY(20px)' },
+                'to': { opacity: 1, transform: 'translateY(0)' },
+              },
+              'moving-grid': {
+                '0%': { backgroundPosition: '0 0' },
+                '100%': { backgroundPosition: '50px 50px' },
+              },
+              slide: {
+                'from': { transform: 'translateX(0)' },
+                'to': { transform: 'translateX(-50%)' },
+              },
+              'footer-scan-vertical': {
+                'from': { backgroundPosition: '0 0' },
+                'to': { backgroundPosition: '0 100px' },
+              },
+              modalEnter: {
+                'from': { opacity: 0, transform: 'scale(0.95) translateY(10px)' },
+                'to': { opacity: 1, transform: 'scale(1) translateY(0)' },
+              },
+              pulse: {
+                '0%, 100%': { boxShadow: '0 0 0 0 rgba(0,255,192,0.4)' },
+                '70%': { boxShadow: '0 0 0 10px rgba(0,255,192,0)' },
+              },
+              bounce: {
+                '0%, 100%': { transform: 'translateY(-5%) scale(1.05)', animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)' },
+                '50%': { transform: 'translateY(0) scale(1)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
+              },
+              'pulse-fast': {
+                '0%, 100%': { opacity: 0.7 },
+                '50%': { opacity: 1 },
+              },
+              'pulse-slow': {
+                '0%, 100%': { opacity: 0.8 },
+                '50%': { opacity: 1 },
+              },
+              'glitch-in': {
+                '0%': { opacity: 0, transform: 'translateY(10px)' },
+                '5%': { transform: 'skewX(5deg)' },
+                '10%': { transform: 'skewX(-5deg)' },
+                '20%': { opacity: 0.5 },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
+              },
+            },
+            animation: {
+              glow: 'glow 3s ease-in-out infinite alternate',
+              'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'pulse-glow-shadow': 'pulse-glow-shadow 3s infinite ease-in-out',
+              scanline: 'scanline 8s linear infinite',
+              'scan-line': 'scan-line 5s infinite linear',
+              'scanline-bg': 'scanline-bg 10s infinite linear',
+              shimmer: 'shimmer 1.5s infinite',
+              fadeIn: 'fadeIn 0.3s ease-out forwards',
+              tabSlideIn: 'tabSlideIn 0.5s ease-out forwards',
+              'moving-grid': 'moving-grid 30s linear infinite',
+              slide: 'slide 40s linear infinite',
+              'footer-scan': 'footer-scan-vertical 15s linear infinite',
+              'modal-enter': 'modalEnter 0.2s ease-out forwards',
+              pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              bounce: 'bounce 1s infinite',
+              'pulse-fast': 'pulse-fast 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'pulse-slow': 'pulse-slow 4s infinite ease-in-out',
+              'glitch-reveal': 'glitch-in 0.5s ease-out',
+            },
+            boxShadow: {
+              'neon-glow-md': '0 0 30px rgba(0,255,192,0.4)',
+              'neon-glow-lg': '0 0 50px rgba(0,255,192,0.8)',
+              'neon-card': '0 6px 20px rgba(0,255,192,0.1)',
+              'neon-card-hover': '0 12px 30px rgba(0,255,192,0.2)',
+              'warning-glow': '0 0 20px rgba(255,51,51,0.2)',
+            },
+          },
+        },
+      }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: #0A0A0A;
+            font-family: 'Rajdhani', sans-serif;
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        body.modal-open {
+          overflow: hidden;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-roboto-mono { font-family: 'Roboto Mono', monospace; }
+        .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+        .font-jetbrains-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .text-glow { text-shadow: 0 0 12px rgba(0, 255, 192, 0.6); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #141414; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #00FFC0; border-radius: 20px; border: 2px solid #141414; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #88ffed; }
+
+        .card-lift {
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .card-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(0,255,192,0.25);
+        }
+        .mask-image-lr {
+          -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+          mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+        }
+        .animate-scan-line::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, transparent, rgba(0, 255, 192, 0.1) 50%, transparent 100%);
+          animation: scan-line 5s infinite linear;
+          pointer-events: none;
+        }
+        .zap-logo-text {
+            background-image: linear-gradient(90deg, #00FFC0, #88ffed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .footer-scan-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-scan-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 192, 0.04) 3px,
+                rgba(0, 255, 192, 0.04) 4px
+            );
+            background-size: 100% 100px;
+            opacity: 0.5;
+            animation: footer-scan-vertical 15s linear infinite;
+        }
+        .bg-grid { 
+          background-image: linear-gradient(rgba(0,255,192,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,192,0.05) 1px, transparent 1px); 
+          background-size: 25px 25px; 
+        }
+        .text-shadow-neon { text-shadow: 0 0 5px #00FFC0, 0 0 10px #00FFC0; }
+
+        input[type="range"] {
+          -webkit-appearance: none;
+          appearance: none;
+          background: transparent;
+          cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+          background-color: #333;
+          height: 0.35rem;
+          border-radius: 99px;
+        }
+        input[type="range"]::-moz-range-track {
+          background-color: #333;
+          height: 0.35rem;
+          border-radius: 99px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          margin-top: -6px; /* center thumb */
+          height: 1.25rem;
+          width: 1.25rem;
+          background-color: #00FFC0;
+          border-radius: 9999px;
+          border: 3px solid #0A0A0A;
+          box-shadow: 0 0 10px rgba(0, 255, 192, 0.8);
+        }
+    </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/google-genai@0.0.0-20240723-145445",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
