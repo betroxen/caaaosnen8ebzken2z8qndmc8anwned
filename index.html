@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- FIXED TITLE AS REQUESTED -->
-    <title>Zapway | Gamble Smarter, Not Harder</title>
+    <title>ZAP // TACTICAL DATA ARCHITECT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,7 +98,7 @@
                 '0%, 100%': { opacity: 0.8 },
                 '50%': { opacity: 1 },
               },
-              'glitch-in': {
+              'glitch-reveal': {
                 '0%': { opacity: 0, transform: 'translateY(10px)' },
                 '5%': { transform: 'skewX(5deg)' },
                 '10%': { transform: 'skewX(-5deg)' },
@@ -139,28 +138,50 @@
       }
     </script>
     <style>
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             background-color: #0A0A0A;
             font-family: 'Rajdhani', sans-serif;
             color: #FFFFFF;
             overflow-x: hidden;
         }
+        body.modal-open {
+          overflow: hidden;
+        }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .font-roboto-mono { font-family: 'Roboto Mono', monospace; }
         .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
         .font-jetbrains-mono { font-family: 'JetBrains Mono', monospace; }
+
         .text-glow { text-shadow: 0 0 12px rgba(0, 255, 192, 0.6); }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #141414; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #00FFC0; border-radius: 20px; border: 2px solid #141414; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #88ffed; }
+
         .card-lift {
             transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s cubic-bezier(0.4,0,0.2,1);
         }
         .card-lift:hover {
             transform: translateY(-8px);
             box-shadow: 0 0 30px rgba(0,255,192,0.25);
+        }
+        .mask-image-lr {
+          -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+          mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+        }
+        .animate-scan-line::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to bottom, transparent, rgba(0, 255, 192, 0.1) 50%, transparent 100%);
+          animation: scan-line 5s infinite linear;
+          pointer-events: none;
         }
         .zap-logo-text {
             background-image: linear-gradient(90deg, #00FFC0, #88ffed);
@@ -169,19 +190,60 @@
             background-clip: text;
             color: transparent;
         }
+        .footer-scan-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-scan-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 192, 0.04) 3px,
+                rgba(0, 255, 192, 0.04) 4px
+            );
+            background-size: 100% 100px;
+            opacity: 0.5;
+            animation: footer-scan-vertical 15s linear infinite;
+        }
         .bg-grid { 
           background-image: linear-gradient(rgba(0,255,192,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,192,0.05) 1px, transparent 1px); 
           background-size: 25px 25px; 
-          animation: moving-grid 30s linear infinite; /* Apply animation for movement */
         }
         .text-shadow-neon { text-shadow: 0 0 5px #00FFC0, 0 0 10px #00FFC0; }
 
-        /* Custom Input Range styles (keeping these from your original) */
-        input[type="range"]::-webkit-slider-runnable-track { background-color: #333; height: 0.35rem; border-radius: 99px; }
-        input[type="range"]::-moz-range-track { background-color: #333; height: 0.35rem; border-radius: 99px; }
+        input[type="range"] {
+          -webkit-appearance: none;
+          appearance: none;
+          background: transparent;
+          cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+          background-color: #333;
+          height: 0.35rem;
+          border-radius: 99px;
+        }
+        input[type="range"]::-moz-range-track {
+          background-color: #333;
+          height: 0.35rem;
+          border-radius: 99px;
+        }
         input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none; appearance: none; margin-top: -6px; height: 1.25rem; width: 1.25rem;
-          background-color: #00FFC0; border-radius: 9999px; border: 3px solid #0A0A0A;
+          -webkit-appearance: none;
+          appearance: none;
+          margin-top: -6px; /* center thumb */
+          height: 1.25rem;
+          width: 1.25rem;
+          background-color: #00FFC0;
+          border-radius: 9999px;
+          border: 3px solid #0A0A0A;
           box-shadow: 0 0 10px rgba(0, 255, 192, 0.8);
         }
     </style>
@@ -190,12 +252,10 @@
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
-    "react/jsx-runtime": "https://aistudiocdn.com/react@^19.2.0/jsx-runtime",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "@google/genai": "https://aistudiocdn.com/google-genai@0.0.0-20240723-145445",
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
+    "appwrite": "https://aistudiocdn.com/appwrite@^15.0.0",
     "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
   }
 }
@@ -203,259 +263,5 @@
 </head>
   <body>
     <div id="root"></div>
-
-    <script type="module">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { jsx } from 'react/jsx-runtime';
-
-        // --- MOCK DATA ---
-        const initialData = {
-            scannerEnabled: true,
-            activeTargets: 4,
-            liveRTP: 96.2,
-            edgeTarget: 29.4,
-            riskTolerance: 50,
-        };
-
-        // --- ICONS (Minimal SVG for Neo-Cyberpunk Look) ---
-        const ZapIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        );
-        const AlertIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        );
-        const ChartIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M18 17L9 8"/></svg>
-        );
-        const CpuIcon = ({ className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="5" width="14" height="14" rx="2" ry="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v2m0 18v2m-6-6h2m18 0h-2m-8-6v-2m0 18v-2m6-14h2m-18 0h2"/></svg>
-        );
-
-        // --- COMPONENTS ---
-
-        const Header = () => (
-            <header className="fixed top-0 left-0 right-0 bg-foundation/95 backdrop-blur-sm z-50 border-b border-neon-surge/20 shadow-neon-glow-md" style={{animation: 'fadeIn 0.5s forwards'}}>
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                        <ZapIcon className="h-6 w-6 text-neon-surge animate-glow" />
-                        <h1 className="font-orbitron text-xl md:text-2xl zap-logo-text tracking-widest text-shadow-neon">
-                            ZAPWAY.FI <span className="text-text-secondary text-base">| TACTICAL DATA ARCHITECT</span>
-                        </h1>
-                    </div>
-                    <nav className="hidden md:flex space-x-6 font-rajdhani font-bold text-lg">
-                        <a href="#monitor" className="text-neon-surge hover:text-white transition duration-200 hover:text-glow">RTP_MONITOR</a>
-                        <a href="#edge" className="text-neon-surge/80 hover:text-white transition duration-200 hover:text-glow">EDGE_FINDER</a>
-                        <a href="#config" className="text-neon-surge/60 hover:text-white transition duration-200 hover:text-glow">SYS_CONFIG</a>
-                        <button className="px-4 py-1.5 bg-warning-high/10 border border-warning-high/50 text-warning-high text-sm rounded-md hover:bg-warning-high/20 transition duration-200 font-jetbrains-mono">
-                            // VETO
-                        </button>
-                    </nav>
-                </div>
-            </header>
-        );
-
-        const DataCard = ({ icon: Icon, title, value, unit, className = '' }) => (
-            <div className={jsx('div', {
-                className: `bg-foundation-light p-6 rounded-xl border border-neon-surge/20 card-lift transition-all duration-300 ${className}`,
-                children: [
-                    jsx('div', { className: 'flex items-center space-x-4 mb-4', children: [
-                        jsx(Icon, { className: 'h-8 w-8 text-neon-surge animate-pulse-slow' }),
-                        jsx('h2', { className: 'font-orbitron text-text-primary text-lg tracking-wider', children: title })
-                    ]}),
-                    jsx('p', { className: 'font-jetbrains-mono text-5xl font-bold', children: [
-                        jsx('span', { className: 'zap-logo-text text-glow', children: value }),
-                        jsx('span', { className: 'text-text-secondary text-base ml-2', children: unit })
-                    ]})
-                ]
-            })} />
-        );
-
-        const ControlPanel = ({ data, setData }) => {
-            const handleSliderChange = (e) => {
-                setData(prev => ({ ...prev, riskTolerance: parseInt(e.target.value) }));
-            };
-
-            return (
-                <div id="config" className="bg-foundation-light p-6 rounded-xl border border-neon-surge/20 shadow-neon-card animate-glitch-reveal" style={{animationDelay: '0.8s'}}>
-                    <h2 className="font-orbitron text-xl text-neon-surge mb-4 border-b border-neon-surge/30 pb-2">SYS_CONFIG // DEGEN MODE</h2>
-                    
-                    <div className="space-y-6">
-                        {/* Scanner Toggle */}
-                        <div className="flex justify-between items-center font-roboto-mono">
-                            <label className="text-text-primary">SCANNER_STATUS:</label>
-                            <button
-                                onClick={() => setData(prev => ({ ...prev, scannerEnabled: !prev.scannerEnabled }))}
-                                className={`px-4 py-2 rounded-lg font-bold transition duration-300 ${
-                                    data.scannerEnabled 
-                                        ? 'bg-neon-surge text-foundation hover:bg-neon-surge/80 shadow-neon-glow-md' 
-                                        : 'bg-foundation-lighter text-text-secondary border border-text-tertiary hover:bg-foundation-light'
-                                }`}
-                            >
-                                {data.scannerEnabled ? 'ONLINE' : 'OFFLINE'}
-                            </button>
-                        </div>
-
-                        {/* Risk Tolerance Slider */}
-                        <div>
-                            <div className="flex justify-between items-center mb-2">
-                                <label className="text-text-primary font-roboto-mono">RISK_TOLERANCE_LEVEL:</label>
-                                <span className="font-orbitron text-xl text-neon-surge">{data.riskTolerance}%</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                step="1"
-                                value={data.riskTolerance}
-                                onChange={handleSliderChange}
-                                className="w-full h-2 rounded-lg"
-                            />
-                        </div>
-
-                        {/* Action Button */}
-                        <button className="w-full py-4 bg-warning-high/80 text-foundation font-orbitron text-xl rounded-lg shadow-warning-glow transition duration-300 hover:bg-warning-high hover:shadow-neon-glow-lg animate-pulse">
-                            INITIATE_TARGET_ACQUISITION
-                        </button>
-                    </div>
-                </div>
-            );
-        };
-
-        const App = () => {
-            const [data, setData] = useState(initialData);
-
-            useEffect(() => {
-                // Mock Real-time data updates for a dynamic feel
-                const interval = setInterval(() => {
-                    if (data.scannerEnabled) {
-                        setData(prev => ({
-                            ...prev,
-                            liveRTP: (95.0 + Math.random() * 2.0).toFixed(2),
-                            activeTargets: Math.floor(Math.random() * 6) + 2,
-                            edgeTarget: (25.0 + Math.random() * 10.0).toFixed(1),
-                        }));
-                    }
-                }, 1500);
-
-                return () => clearInterval(interval);
-            }, [data.scannerEnabled]);
-
-            return (
-                <div className="min-h-screen bg-foundation pt-20 custom-scrollbar">
-                    <Header />
-                    
-                    <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 md:py-16">
-                        
-                        {/* Background Grid Layer */}
-                        <div className="absolute inset-0 bg-grid opacity-5 pointer-events-none z-0"></div>
-
-                        <section id="monitor" className="relative z-10 space-y-12">
-                            <h1 className="font-orbitron text-4xl md:text-6xl text-center text-neon-surge tracking-tighter text-glow animate-glitch-reveal">
-                                TACTICAL DATA ARCHITECT
-                            </h1>
-                            <p className="text-center font-roboto-mono text-text-secondary text-lg mb-10 animate-glitch-reveal" style={{animationDelay: '0.2s'}}>
-                                // LIVE FEED STATUS: <span className={data.scannerEnabled ? "text-neon-surge" : "text-warning-high"}>{data.scannerEnabled ? 'OPERATIONAL' : 'DORMANT'}</span>
-                            </p>
-
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                                <DataCard 
-                                    icon={CpuIcon} 
-                                    title="SYSTEM LATENCY" 
-                                    value="24" 
-                                    unit="ms" 
-                                    className="col-span-1 animate-fadeIn"
-                                />
-                                <DataCard 
-                                    icon={ChartIcon} 
-                                    title="OBSERVED RTP (AVG)" 
-                                    value={data.liveRTP} 
-                                    unit="%" 
-                                    className="col-span-1 animate-fadeIn" 
-                                    style={{animationDelay: '0.1s'}}
-                                />
-                                <DataCard 
-                                    icon={AlertIcon} 
-                                    title="ACTIVE TARGETS" 
-                                    value={data.activeTargets} 
-                                    unit="INSTANCES" 
-                                    className="col-span-1 animate-fadeIn" 
-                                    style={{animationDelay: '0.2s'}}
-                                />
-                                <DataCard 
-                                    icon={ZapIcon} 
-                                    title="MAX EDGE FOUND" 
-                                    value={`+${data.edgeTarget}`} 
-                                    unit="%" 
-                                    className="col-span-1 animate-fadeIn border-warning-high/50 bg-warning-high/10" 
-                                    style={{animationDelay: '0.3s'}}
-                                />
-                            </div>
-                        </section>
-
-                        <section id="targets" className="mt-20 relative z-10">
-                            <h2 className="font-orbitron text-2xl md:text-3xl text-neon-surge mb-6 border-b border-neon-surge/30 pb-2 animate-fadeIn" style={{animationDelay: '0.5s'}}>
-                                EDGE_FINDER // HIGH VALUE TARGETS
-                            </h2>
-                            <div className="space-y-4">
-                                {/* Mock Target List */}
-                                {['Crash_Prime', 'Mines_v2', 'Roulette_Eu_v3', 'Dice_Aggro_v1'].map((game, index) => (
-                                    <div 
-                                        key={game} 
-                                        className="bg-foundation-light p-4 rounded-lg border border-warning-low/20 flex justify-between items-center card-lift animate-tabSlideIn"
-                                        style={{animationDelay: `${0.6 + index * 0.1}s`}}
-                                    >
-                                        <div className="font-jetbrains-mono text-lg space-x-2">
-                                            <span className="text-warning-low/80">[LVL-03]</span>
-                                            <span className="text-text-primary">{game}</span>
-                                        </div>
-                                        <div className="flex items-center space-x-6">
-                                            <span className="font-orbitron text-2xl text-neon-surge text-glow">
-                                                +{ (20.0 + Math.random() * 15.0).toFixed(2) }%
-                                            </span>
-                                            <button className="px-3 py-1 bg-neon-surge/20 text-neon-surge border border-neon-surge rounded-full text-sm hover:bg-neon-surge/40 transition duration-200">
-                                                EXPLOIT_NOW
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        <section className="mt-20 grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
-                            <div className="lg:col-span-2">
-                                <ControlPanel data={data} setData={setData} />
-                            </div>
-                            <div className="lg:col-span-1">
-                                <DataCard 
-                                    icon={CpuIcon} 
-                                    title="RISK PROFILE" 
-                                    value={data.riskTolerance} 
-                                    unit="%" 
-                                    className="bg-foundation-light h-full border-warning-low/50 bg-warning-low/10 animate-fadeIn" 
-                                    style={{animationDelay: '0.9s'}}
-                                />
-                            </div>
-                        </section>
-
-                    </main>
-
-                    <footer className="mt-20 py-8 bg-foundation-lighter border-t border-neon-surge/20 text-center font-roboto-mono text-sm text-text-tertiary">
-                        <p>ZAPWAY PROTOCOL v3.1 | INITIATED 2024-11-17</p>
-                        <p className="mt-1">WARNING: Exploit at your own risk. The Swarm is not liable for data corruption or financial loss.</p>
-                    </footer>
-                </div>
-            );
-        };
-
-        // RENDER THE APP
-        const rootElement = document.getElementById('root');
-        if (rootElement) {
-            const root = createRoot(rootElement);
-            root.render(jsx(App, null));
-        }
-
-    </script>
   </body>
 </html>
-

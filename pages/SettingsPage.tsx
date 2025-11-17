@@ -25,8 +25,8 @@ const SettingsPage = () => {
     const [security] = useState({ twoFactor: false, keyRotation: '30 days' });
 
     return (
-        <div className="min-h-screen bg-foundation p-4 sm:p-8 font-rajdhani animate-fadeIn">
-            <header className="max-w-7xl mx-auto mb-8 sm:mb-12">
+        <div className="font-rajdhani animate-fadeIn">
+            <header className="mb-8 sm:mb-12">
                 <h1 className="text-4xl sm:text-5xl font-orbitron font-black text-white uppercase tracking-tighter mb-2">
                     COMMAND CONSOLE
                 </h1>
@@ -35,7 +35,7 @@ const SettingsPage = () => {
                 </p>
             </header>
 
-            <div className="max-w-7xl mx-auto p-4 sm:p-6 mb-8 bg-blue-900/20 border border-blue-700/50 rounded-xl flex items-center gap-4">
+            <div className="p-4 sm:p-6 mb-8 bg-blue-900/20 border border-blue-700/50 rounded-xl flex items-center gap-4">
                 <Icons.AlertTriangle className="h-6 w-6 text-blue-400 shrink-0" />
                 <div>
                     <h4 className="text-lg font-bold text-blue-300 font-orbitron">PROTOCOL DEPLOYMENT IMMINENT</h4>
@@ -45,8 +45,9 @@ const SettingsPage = () => {
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="OPERATOR PREFERENCES" icon={Icons.User} isWIP={true}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Define your operational environment and display configuration.
@@ -74,6 +75,7 @@ const SettingsPage = () => {
                     </div>
                 </ConsoleModule>
 
+                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="SECURITY PROTOCOL" icon={Icons.Shield}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Mandatory technical measures for profile fortification and key management.
@@ -104,6 +106,7 @@ const SettingsPage = () => {
                     </div>
                 </ConsoleModule>
                 
+                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="TACTICAL NOTIFICATIONS" icon={Icons.Bell} isWIP={true}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Configure alerts for system audits, XAI risk scores, and protocol updates.
@@ -128,7 +131,7 @@ const SettingsPage = () => {
                 </ConsoleModule>
             </div>
 
-            <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-foundation-light">
+            <div className="mt-8 pt-6 border-t border-foundation-light">
                  <Button disabled={true} size="lg" className="w-full sm:w-auto bg-neon-surge/20 text-neon-surge font-jetbrains-mono uppercase tracking-widest hover:bg-neon-surge/30 py-3">
                     [ PENDING AUDIT: SAVE CONFIGURATION ]
                 </Button>

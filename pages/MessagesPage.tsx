@@ -275,7 +275,7 @@ const MessagesPage = () => {
     };
     
     return (
-        <div className="container mx-auto max-w-[1600px] h-[calc(100vh-8rem)] flex flex-col font-rajdhani animate-fadeIn">
+        <div className="h-full flex flex-col font-rajdhani animate-fadeIn">
             <ConfirmationModal isOpen={isModalOpen} title={modalTitle} body={modalBody} onConfirm={() => { if (modalAction) modalAction(); }} onClose={closeModal} />
 
             <header className="mb-4 flex-shrink-0">
@@ -345,7 +345,7 @@ const MessagesPage = () => {
                         </>
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-text-tertiary p-6 text-center bg-grid">
-                            <Icons.Activity className="h-16 w-16 opacity-20 text-neon-surge mb-4 animate-pulse" />
+                            <Icons.Activity className="h-16 w-16 opacity-20 text-neon-surge animate-pulse" />
                             <h3 className="font-orbitron text-xl text-white uppercase tracking-widest mb-2">AWAITING SIGNAL</h3>
                         </div>
                     )}

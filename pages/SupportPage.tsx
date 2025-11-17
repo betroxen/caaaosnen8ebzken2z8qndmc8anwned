@@ -144,6 +144,7 @@ const SupportPage: React.FC = () => {
                 <span className="text-neon-surge">01 //</span> INTEL CIRCUIT & PROTOCOL ACCESS
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* FIX: Added children to IntelCard components */}
                 <IntelCard imageSrc="https://files.catbox.moe/7y0cnq.jpg" title="KNOWLEDGE BASE" onClick={() => appContext.setCurrentPage('Review Methodology')}>
                     Raw Data Library on ZAP mechanics, score pillars, and vetting blueprints.
                 </IntelCard>

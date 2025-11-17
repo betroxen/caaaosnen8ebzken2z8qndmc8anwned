@@ -37,21 +37,26 @@ import PartnerVettingPage from './pages/PartnerVettingPage';
 import { AuthModal } from './components/LoginModal';
 import { Toaster } from './components/Toaster';
 import { ReviewModal } from './components/ReviewModal';
+import { Icons } from './components/icons';
 
 function App() {
   const appContext = useContext(AppContext);
   if (!appContext) return null;
 
   const {
+    auth, logout,
+    currentPage, setCurrentPage,
     isCollapsed, isMobileOpen, setIsMobileOpen,
-    isLoggedIn, login, logout, 
     openAuthModal, closeAuthModal, isAuthModalOpen, authModalInitialTab,
     openReviewModal, closeReviewModal, isReviewModalOpen, initialReviewCasinoId,
     viewingCasinoId, setViewingCasinoId
   } = appContext;
 
+  // Pages with special full-bleed layouts (e.g., video backgrounds) are excluded from the standard container.
+  const pagesWithCustomLayout = ['Home', 'ProvablyFairPage', 'ProtocolDeepDivePage'];
+
   const renderPage = () => {
-    switch (appContext.currentPage) {
+    switch (currentPage) {
       case 'Mines Game': return <MinesGamePage />;
       case 'Plinko Game': return <PlinkoGamePage />;
       case 'About Us': return <AboutUsPage />;
@@ -84,25 +89,33 @@ function App() {
         return <DashboardPage />;
     }
   };
+  
+  if (auth.status === 'loading') {
+    return (
+      <div className="bg-foundation text-text-primary font-rajdhani min-h-screen flex flex-col items-center justify-center">
+          <Icons.Zap className="h-16 w-16 text-neon-surge animate-pulse-glow" />
+          <p className="mt-4 font-jetbrains-mono text-neon-surge uppercase tracking-widest animate-pulse">Initializing Secure Connection...</p>
+      </div>
+    );
+  }
 
-  if (!isLoggedIn) {
+  if (auth.status === 'unauthenticated') {
     return (
       <div className="bg-foundation text-text-primary font-rajdhani min-h-screen flex flex-col">
         <AuthModal 
           isOpen={isAuthModalOpen}
           onClose={closeAuthModal}
           initialTab={authModalInitialTab}
-          onLoginSuccess={login}
         />
         <Toaster />
         <Header
-          isLoggedIn={isLoggedIn}
-          onLogout={logout}
+          isLoggedIn={false}
+          onLogout={() => {}}
           onOpenLogin={() => openAuthModal('login')}
           onOpenRegister={() => openAuthModal('register')}
         />
         <main className="flex-grow">
-          <HomePage onRegisterClick={() => openAuthModal('register')} />
+          {currentPage === 'Home' || currentPage === 'Dashboard' ? <HomePage onRegisterClick={() => openAuthModal('register')} /> : renderPage()}
         </main>
         <Footer />
       </div>
@@ -115,7 +128,6 @@ function App() {
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
         initialTab={authModalInitialTab}
-        onLoginSuccess={login}
       />
       <ReviewModal
         isOpen={isReviewModalOpen}
@@ -124,7 +136,7 @@ function App() {
       />
       <Toaster />
       <Header
-        isLoggedIn={isLoggedIn}
+        isLoggedIn={true}
         onLogout={logout}
         onOpenLogin={() => openAuthModal('login')}
         onOpenRegister={() => openAuthModal('register')}
@@ -142,17 +154,17 @@ function App() {
         style={{ '--sidebar-width': isCollapsed ? '72px' : '256px' } as React.CSSProperties}
       >
         <main className="flex-grow pt-20 md:pt-24 pb-12">
-          <div className="px-4 sm:px-6 lg:px-8">
-             {viewingCasinoId ? (
-                <CasinoDetailPage
-                    casinoId={viewingCasinoId}
-                    onBack={() => setViewingCasinoId(null)}
-                    onOpenReview={() => openReviewModal(viewingCasinoId)}
-                />
-             ) : (
+           {pagesWithCustomLayout.includes(currentPage) && !viewingCasinoId ? (
                 renderPage()
-             )}
-          </div>
+              ) : (
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  {viewingCasinoId ? (
+                      <CasinoDetailPage casinoId={viewingCasinoId} onBack={() => setViewingCasinoId(null)} onOpenReview={() => openReviewModal(viewingCasinoId)} />
+                  ) : (
+                      renderPage()
+                  )}
+                </div>
+            )}
         </main>
         <Footer />
       </div>

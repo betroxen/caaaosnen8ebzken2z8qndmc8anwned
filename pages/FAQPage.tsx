@@ -82,6 +82,7 @@ const FAQPage: React.FC = () => {
             </p>
         </div>
 
+        {/* FIX: Accordion components are now correctly structured with children. */}
         <div className="bg-foundation-light rounded-xl border border-[#333] shadow-2xl overflow-hidden p-2 md:p-4">
             <Accordion multiple={false} defaultOpen={["Q1"]}>
                 {INTEL_ITEMS.map((item) => (

@@ -15,7 +15,7 @@ const ZapStackCard: React.FC<{ number: string; title: string; children: React.Re
 
 const AboutUsPage: React.FC = () => {
     return (
-        <div className="animate-fadeIn max-w-6xl mx-auto py-12 px-4 font-rajdhani">
+        <div className="animate-fadeIn font-rajdhani">
 
             <header className="text-center mb-16">
                 <h1 className="font-orbitron text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">

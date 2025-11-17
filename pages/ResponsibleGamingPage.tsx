@@ -2,7 +2,7 @@ import React from 'react';
 
 const ResponsibleGamingPage: React.FC = () => {
     return (
-        <div className="animate-fadeIn max-w-4xl mx-auto text-text-secondary">
+        <div className="animate-fadeIn text-text-secondary">
             <h1 className="font-orbitron text-3xl md:text-4xl font-bold text-white text-center">
                 RESPONSIBLE GAMING <span className="text-neon-surge">(RG) POLICY (v2.0)</span>
             </h1>

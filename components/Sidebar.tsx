@@ -103,7 +103,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
       <div className={`fixed left-0 top-16 bottom-0 z-[90] w-[85vw] max-w-[300px] md:hidden transform transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
          <div className="h-full flex flex-col bg-foundation border-r border-[#333] shadow-2xl">
              <div className="shrink-0">
-                 {appContext?.isLoggedIn && <MobilePilotSummary />}
+                 {/* FIX: Correctly check authentication status from the auth object in the context. */}
+                 {appContext?.auth.status === 'authenticated' && <MobilePilotSummary />}
              </div>
 
              <div className="flex-1 overflow-y-auto custom-scrollbar py-4">

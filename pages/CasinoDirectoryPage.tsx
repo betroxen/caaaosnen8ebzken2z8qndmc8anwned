@@ -1,12 +1,29 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react';
-import { casinos, Casino } from '../constants/casinos';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Toggle } from '../components/Toggle';
 import { SkeletonCard } from '../components/SkeletonCard';
 import { Icons } from '../components/icons';
-import { AppContext } from '../context/AppContext';
+import { AppContext, appwriteDatabases, DATABASE_ID, CASINOS_COLLECTION_ID } from '../context/AppContext';
+import { Models, Query } from 'appwrite';
+
+// Define the Casino type based on your Appwrite collection structure
+export interface Casino extends Models.Document {
+    id: string;
+    name: string;
+    logo: string;
+    bonus: string;
+    description: string;
+    tags: string[];
+    rating: number;
+    reviewCount: number;
+    withdrawalTime: string;
+    certified: boolean;
+    status: 'VERIFIED' | 'UNVERIFIED';
+    specialRanking?: string;
+    established: string;
+}
 
 const CasinoGridCard: React.FC<{ casino: Casino, onClick: () => void, style: React.CSSProperties }> = ({ casino, onClick, style }) => {
     const isEternalCrown = casino.specialRanking === 'ETERNAL CROWN';
@@ -104,7 +121,9 @@ const CATEGORY_FILTERS = ['ALL', 'ZERO-EDGE', 'HIGH-BONUS', 'NEW', 'LIVE', 'SPOR
 
 const CasinoDirectoryPage: React.FC = () => {
     const appContext = useContext(AppContext);
+    const [casinos, setCasinos] = useState<Casino[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState('rating');
     const [filterCategory, setFilterCategory] = useState('ALL');
@@ -114,8 +133,24 @@ const CasinoDirectoryPage: React.FC = () => {
     const [view, setView] = useState<'grid' | 'list'>('grid');
 
     useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 1200);
-        return () => clearTimeout(timer);
+        const fetchCasinos = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                const response = await appwriteDatabases.listDocuments<Casino>(
+                    DATABASE_ID,
+                    CASINOS_COLLECTION_ID,
+                    [Query.limit(100)] // Adjust limit as needed
+                );
+                setCasinos(response.documents as unknown as Casino[]);
+            } catch (err) {
+                console.error("Failed to fetch casinos:", err);
+                setError("Failed to load operator grid data. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCasinos();
     }, []);
 
     const filteredCasinos = useMemo(() => {
@@ -132,14 +167,14 @@ const CasinoDirectoryPage: React.FC = () => {
                 if (sortBy === 'newest') return parseInt(b.established) - parseInt(a.established);
                 return 0;
             });
-    }, [searchTerm, sortBy, filterCategory, minRating, showVerifiedOnly]);
+    }, [casinos, searchTerm, sortBy, filterCategory, minRating, showVerifiedOnly]);
 
     const handleFilterClose = () => {
         if (isMobileFiltersOpen) setIsMobileFiltersOpen(false);
     }
     
     return (
-        <div className="container mx-auto max-w-[1400px] flex flex-col animate-fadeIn">
+        <div className="flex flex-col animate-fadeIn">
 
             <header className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 flex-shrink-0 gap-4">
                 <div>
@@ -154,7 +189,7 @@ const CasinoDirectoryPage: React.FC = () => {
                         <span className="text-[#333]">|</span>
                         <p className="text-text-tertiary">TRACKING {casinos.length} UNITS</p>
                         <span className="text-[#333] hidden sm:inline">|</span>
-                        <p className="text-text-tertiary hidden sm:inline">LAST SYNC: NOV 09, 2025</p>
+                        <p className="text-text-tertiary hidden sm:inline">LAST SYNC: {new Date().toLocaleDateString()}</p>
                     </div>
                 </div>
                 
@@ -256,6 +291,14 @@ const CasinoDirectoryPage: React.FC = () => {
                     </div>
 
                     {!loading && (<p className="mb-4 px-1 font-jetbrains-mono text-xs text-text-tertiary uppercase">// DISPLAYING <span className="text-white font-bold">{filteredCasinos.length}</span> INTEL UNITS</p>)}
+
+                     {error && (
+                        <div className="p-8 text-center bg-red-900/20 border border-red-500/50 rounded-xl text-red-400">
+                            <Icons.AlertTriangle className="h-10 w-10 mx-auto mb-4" />
+                            <h3 className="font-orbitron text-lg font-bold text-white mb-2">GRID CONNECTION FAILED</h3>
+                            <p className="font-jetbrains-mono text-sm">{error}</p>
+                        </div>
+                    )}
 
                     <div className={view === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 pb-8" : "flex flex-col gap-4 pb-8"}>
                         {loading ? Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />)

@@ -1,17 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Icons } from './icons';
 import { Button } from './Button';
 import { Input } from './Input';
 import { ZapLogo } from './ZapLogo';
+import { AppContext } from '../context/AppContext';
+import { ToastContext } from '../context/ToastContext';
 
 interface AuthModalProps {
     isOpen: boolean;
     onClose: () => void;
     initialTab: 'login' | 'register';
-    onLoginSuccess: () => void;
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTab }) => {
+    const appContext = useContext(AppContext);
+    const toastContext = useContext(ToastContext);
+
     const [activeTab, setActiveTab] = useState<'login' | 'register'>(initialTab);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -69,7 +73,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTa
         
         setIsCheckingHandle(true);
         handleTimeoutRef.current = setTimeout(() => {
-            const isAvailable = !['taken', 'admin'].includes(username.toLowerCase());
+            // This is a mock check. In production, this would be an Appwrite Function call.
+            const isAvailable = !['taken', 'admin', 'zap'].includes(username.toLowerCase());
             setHandleAvailable(isAvailable); 
             setIsCheckingHandle(false);
         }, 600);
@@ -78,28 +83,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, initialTa
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
-        if (activeTab === 'login') {
-            if (!email || !password) { setError('AUTH_ERR: CREDENTIALS MISSING'); return; }
-        } else {
-            if (!username || !email || !password || !confirmPassword) { setError('AUTH_ERR: ALL FIELDS MANDATORY'); return; }
-            if (password !== confirmPassword) { setError('AUTH_ERR: PASSKEY MISMATCH'); return; }
-            if (passwordStrength < 3) { setError('AUTH_ERR: PASSKEY STRENGTH INSUFFICIENT'); return; }
-            if (!termsAccepted) { setError('AUTH_ERR: AFFIRMATION PROTOCOL REQUIRED'); return; }
-            if (handleAvailable === false) { setError('AUTH_ERR: HANDLE UNAVAILABLE'); return; }
-        }
-
         setIsLoading(true);
 
-        setTimeout(() => {
-            setIsLoading(false);
-            if (email.includes('fail')) {
-                 setError('AUTH_ERR: INVALID CREDENTIALS. RETRY.');
+        try {
+            if (activeTab === 'login') {
+                if (!email || !password) { throw new Error('AUTH_ERR: CREDENTIALS MISSING'); }
+                await appContext?.login(email, password);
+                toastContext?.showToast('CONNECTION ESTABLISHED. Welcome back, Operator.', 'success');
             } else {
-                onLoginSuccess();
-                resetForm();
+                if (!username || !email || !password || !confirmPassword) { throw new Error('AUTH_ERR: ALL FIELDS MANDATORY'); }
+                if (password !== confirmPassword) { throw new Error('AUTH_ERR: PASSKEY MISMATCH'); }
+                if (passwordStrength < 3) { throw new Error('AUTH_ERR: PASSKEY STRENGTH INSUFFICIENT'); }
+                if (!termsAccepted) { throw new Error('AUTH_ERR: AFFIRMATION PROTOCOL REQUIRED'); }
+                if (handleAvailable === false) { throw new Error('AUTH_ERR: HANDLE UNAVAILABLE'); }
+
+                await appContext?.register(username, email, password);
+                toastContext?.showToast('PROFILE CREATED. Welcome to the Grid, Operator.', 'success');
             }
-        }, 1500);
+            onClose();
+        } catch (err: any) {
+            setError(err.message || 'An unknown authentication error occurred.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (!isOpen) return null;

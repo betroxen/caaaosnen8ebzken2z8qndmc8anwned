@@ -104,6 +104,7 @@ const AffiliatePage: React.FC = () => {
                     PHASE ONE: MONETIZATION ARCHITECTURE
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* FIX: Added children to PillarCard components */}
                     <PillarCard icon={Icons.Zap} number="01" title="INDUSTRY-LEADING COMMISSIONS">
                         Benefit from a high-yield, transparent revenue share model. Performance is measured using Layer 2 settled volume, eliminating disputes and guaranteeing payouts based on verifiable transactions.
                     </PillarCard>
