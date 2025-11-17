@@ -20,7 +20,7 @@ import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import MessagesPage from './pages/MessagesPage';
 import RewardsPage from './pages/RewardsPage';
-import CasinoDirectoryPage from './pages/CasinoDirectoryPage';
+import { CasinoDirectoryPage } from './pages/CasinoDirectoryPage';
 import { CasinoDetailPage } from './pages/CasinoDetailPage';
 import BonusOffersPage from './pages/BonusOffersPage';
 import LiveRTPTrackerPage from './pages/LiveRTPTrackerPage';
@@ -28,7 +28,7 @@ import ReviewMethodologyPage from './pages/ReviewMethodologyPage';
 import ProvablyFairPage from './pages/ProvablyFairPage';
 import SupportPage from './pages/SupportPage';
 import CookiesPolicyPage from './pages/CookiesPolicyPage';
-import CertifiedPlatformsPage from './pages/CertifiedPlatformsPage';
+import { CertifiedPlatformsPage } from './pages/CertifiedPlatformsPage';
 import AffiliatePage from './pages/AffiliatePage';
 import CopyrightNoticePage from './pages/CopyrightNoticePage';
 import FAQPage from './pages/FAQPage';
@@ -38,6 +38,7 @@ import { AuthModal } from './components/LoginModal';
 import { Toaster } from './components/Toaster';
 import { ReviewModal } from './components/ReviewModal';
 import { Icons } from './components/icons';
+import PageLayout from './components/PageLayout';
 
 function App() {
   const appContext = useContext(AppContext);
@@ -72,6 +73,7 @@ function App() {
       case 'Settings': return <SettingsPage />;
       case 'Messages': return <MessagesPage />;
       case 'Rewards': return <RewardsPage />;
+      // FIX: Changed default import to named import for CasinoDirectoryPage as the module does not have a default export.
       case 'Casino Directory': return <CasinoDirectoryPage />;
       case 'Bonus Offers': return <BonusOffersPage />;
       case 'Live RTP Tracker': return <LiveRTPTrackerPage />;
@@ -114,8 +116,14 @@ function App() {
           onOpenLogin={() => openAuthModal('login')}
           onOpenRegister={() => openAuthModal('register')}
         />
-        <main className="flex-grow">
-          {currentPage === 'Home' || currentPage === 'Dashboard' ? <HomePage onRegisterClick={() => openAuthModal('register')} /> : renderPage()}
+        <main className="flex-grow pt-16">
+          {['Home', 'Dashboard'].includes(currentPage) ? (
+            <HomePage onRegisterClick={() => openAuthModal('register')} />
+          ) : (
+            <PageLayout>
+              {renderPage()}
+            </PageLayout>
+          )}
         </main>
         <Footer />
       </div>
@@ -153,17 +161,17 @@ function App() {
         className={`relative flex flex-col min-h-screen transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] md:pl-[var(--sidebar-width)]`}
         style={{ '--sidebar-width': isCollapsed ? '72px' : '256px' } as React.CSSProperties}
       >
-        <main className="flex-grow pt-20 md:pt-24 pb-12">
+        <main className="flex-grow pt-16">
            {pagesWithCustomLayout.includes(currentPage) && !viewingCasinoId ? (
                 renderPage()
               ) : (
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <PageLayout>
                   {viewingCasinoId ? (
                       <CasinoDetailPage casinoId={viewingCasinoId} onBack={() => setViewingCasinoId(null)} onOpenReview={() => openReviewModal(viewingCasinoId)} />
                   ) : (
                       renderPage()
                   )}
-                </div>
+                </PageLayout>
             )}
         </main>
         <Footer />

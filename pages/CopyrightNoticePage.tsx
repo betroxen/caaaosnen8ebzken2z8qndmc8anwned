@@ -2,7 +2,7 @@ import React from 'react';
 
 const CopyrightNoticePage: React.FC = () => {
     return (
-        <div className="animate-fadeIn max-w-4xl mx-auto text-text-secondary">
+        <div className="animate-fadeIn text-text-secondary">
             <h1 className="font-orbitron text-3xl md:text-4xl font-bold text-white text-center">
                 ZAPWAY CORP. OFFICIAL COPYRIGHT <span className="text-neon-surge">AND INTELLECTUAL PROPERTY NOTICE</span>
             </h1>

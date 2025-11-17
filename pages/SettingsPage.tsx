@@ -47,7 +47,6 @@ const SettingsPage = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="OPERATOR PREFERENCES" icon={Icons.User} isWIP={true}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Define your operational environment and display configuration.
@@ -75,7 +74,6 @@ const SettingsPage = () => {
                     </div>
                 </ConsoleModule>
 
-                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="SECURITY PROTOCOL" icon={Icons.Shield}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Mandatory technical measures for profile fortification and key management.
@@ -106,7 +104,6 @@ const SettingsPage = () => {
                     </div>
                 </ConsoleModule>
                 
-                {/* Fix: Added children to ConsoleModule */}
                 <ConsoleModule title="TACTICAL NOTIFICATIONS" icon={Icons.Bell} isWIP={true}>
                     <p className="text-text-secondary mb-4 text-sm">
                         Configure alerts for system audits, XAI risk scores, and protocol updates.

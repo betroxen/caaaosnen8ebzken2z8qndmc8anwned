@@ -176,7 +176,6 @@ export const CasinoDetailPage: React.FC<CasinoDetailPageProps> = ({ casinoId, on
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-tabSlideIn">
                         <div className="lg:col-span-8 space-y-8">
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                {/* FIX: Added children to Card components */}
                                 <Card className="p-4 text-center bg-foundation border-[#333]">
                                     <p className="text-xs font-jetbrains-mono text-text-tertiary uppercase">ESTABLISHED</p>
                                     <p className="text-2xl font-orbitron text-white font-bold">{casino.established}</p>
@@ -196,7 +195,6 @@ export const CasinoDetailPage: React.FC<CasinoDetailPageProps> = ({ casinoId, on
                             </div>
                             {parsedZeroEdgeIntel && (
                                 <Card className="p-6 md:p-8 bg-foundation border-neon-surge relative overflow-hidden">
-                                    {/* FIX: Added children to Card component */}
                                     <h3 className="font-orbitron text-white mb-6 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
                                         <Icons.Gem className="h-4 w-4 text-neon-surge" /> ZERO-EDGE INTEL
                                     </h3>
@@ -212,19 +210,6 @@ export const CasinoDetailPage: React.FC<CasinoDetailPageProps> = ({ casinoId, on
                                     </div>
                                 </Card>
                             )}
-                            <Card className="p-6 md:p-8 bg-foundation border-[#333]">
-                                <h3 className="font-orbitron text-white mb-6 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
-                                    <Icons.Database className="h-4 w-4 text-neon-surge" /> CORPORATE INTELLIGENCE
-                                </h3>
-                                {/* FIX: Added children to Card component */}
-                                <div className="space-y-4 text-sm font-jetbrains-mono">
-                                    <p><span className="text-text-tertiary w-32 inline-block">Founder:</span> <span className="text-white font-bold">{casino.founder}</span></p>
-                                    <p><span className="text-text-tertiary w-32 inline-block">Company:</span> <span className="text-white font-bold">{casino.company}</span></p>
-                                    <p><span className="text-text-tertiary w-32 inline-block">License:</span> <span className="text-white font-bold">{casino.license}</span></p>
-                                    <p><span className="text-text-tertiary w-32 inline-block">Company Size:</span> <span className="text-white font-bold">{casino.companySize}</span></p>
-                                    <p><span className="text-text-tertiary w-32 inline-block">Languages:</span> <span className="text-white font-bold">{casino.languages}</span></p>
-                                </div>
-                            </Card>
                              <Card className="p-6 md:p-8 bg-foundation border-[#333]">
                                 <h3 className="font-orbitron text-white mb-6 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
                                     <Icons.Wallet className="h-4 w-4 text-neon-surge" /> FINANCIAL RAILS
@@ -235,9 +220,8 @@ export const CasinoDetailPage: React.FC<CasinoDetailPageProps> = ({ casinoId, on
                             </Card>
                         </div>
                         <div className="lg:col-span-4 space-y-6">
-                           {/* FIX: Added children to Card component */}
                            <Card className="p-6 bg-foundation border-[#333]">
-                               <h3 className="font-orbitron text-white mb-4 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
+                                <h3 className="font-orbitron text-white mb-4 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
                                    <Icons.Info className="h-4 w-4 text-neon-surge" /> QUICK INTEL
                                </h3>
                                <div className="space-y-3 text-xs font-jetbrains-mono">
@@ -251,6 +235,18 @@ export const CasinoDetailPage: React.FC<CasinoDetailPageProps> = ({ casinoId, on
                                    </div>
                                </div>
                            </Card>
+                            <Card className="p-6 md:p-8 bg-foundation border-[#333]">
+                                <h3 className="font-orbitron text-white mb-6 uppercase text-sm tracking-[0.2em] flex items-center gap-2 border-b border-[#333] pb-4">
+                                    <Icons.Database className="h-4 w-4 text-neon-surge" /> CORPORATE INTELLIGENCE
+                                </h3>
+                                <div className="space-y-4 text-sm font-jetbrains-mono">
+                                    <p><span className="text-text-tertiary w-32 inline-block">Founder:</span> <span className="text-white font-bold">{casino.founder}</span></p>
+                                    <p><span className="text-text-tertiary w-32 inline-block">Company:</span> <span className="text-white font-bold">{casino.company}</span></p>
+                                    <p><span className="text-text-tertiary w-32 inline-block">License:</span> <span className="text-white font-bold">{casino.license}</span></p>
+                                    <p><span className="text-text-tertiary w-32 inline-block">Company Size:</span> <span className="text-white font-bold">{casino.companySize}</span></p>
+                                    <p><span className="text-text-tertiary w-32 inline-block">Languages:</span> <span className="text-white font-bold">{casino.languages}</span></p>
+                                </div>
+                            </Card>
                         </div>
                     </div>
                 )}

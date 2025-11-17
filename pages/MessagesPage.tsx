@@ -275,7 +275,7 @@ const MessagesPage = () => {
     };
     
     return (
-        <div className="h-full flex flex-col font-rajdhani animate-fadeIn">
+        <div className="flex flex-col font-rajdhani animate-fadeIn">
             <ConfirmationModal isOpen={isModalOpen} title={modalTitle} body={modalBody} onConfirm={() => { if (modalAction) modalAction(); }} onClose={closeModal} />
 
             <header className="mb-4 flex-shrink-0">

@@ -150,7 +150,7 @@ const MinesGamePage: React.FC = () => {
     };
 
     return (
-        <div className="animate-fadeIn flex flex-col">
+        <div className="animate-fadeIn">
 
              <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div className="flex items-center gap-4">

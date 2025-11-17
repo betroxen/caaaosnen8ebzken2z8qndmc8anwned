@@ -12,7 +12,7 @@ const PartnerVettingPage: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto max-w-5xl pt-10 pb-20 bg-grid animate-fadeIn">
+        <div className="bg-grid animate-fadeIn">
 
             {/* HEADER & STATUS METER */}
             <div className="mb-16">

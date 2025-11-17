@@ -86,7 +86,7 @@ const AffiliatePage: React.FC = () => {
     ];
 
     return (
-        <div className="animate-fadeIn max-w-6xl mx-auto py-12 px-4 font-rajdhani">
+        <div className="font-rajdhani animate-fadeIn">
             <header className="text-center mb-16">
                 <h1 className="font-orbitron text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
                     ZAPWAY // <span className="text-neon-surge">SENTINEL PARTNER PROTOCOL</span>
@@ -104,7 +104,6 @@ const AffiliatePage: React.FC = () => {
                     PHASE ONE: MONETIZATION ARCHITECTURE
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* FIX: Added children to PillarCard components */}
                     <PillarCard icon={Icons.Zap} number="01" title="INDUSTRY-LEADING COMMISSIONS">
                         Benefit from a high-yield, transparent revenue share model. Performance is measured using Layer 2 settled volume, eliminating disputes and guaranteeing payouts based on verifiable transactions.
                     </PillarCard>
@@ -219,74 +218,11 @@ const AffiliatePage: React.FC = () => {
                                 <h3 className="font-orbitron text-xl text-neon-surge mb-6 pb-3 border-b border-[#333] uppercase">
                                     SECTION 2: NETWORK PROFILE // DEPLOYMENT INTELLIGENCE
                                 </h3>
-                                <div className="space-y-6">
-                                    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 items-start">
-                                        <label className="text-sm font-bold text-white pt-2">05. Primary Channel</label>
-                                        <Input name="channel" value={formData.channel} onChange={handleInputChange} required />
-                                        <p className="text-xs text-text-tertiary font-jetbrains-mono mt-2">Website, Discord, Media Platform, etc.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 items-start">
-                                        <label className="text-sm font-bold text-white pt-2">06. Primary URL/Link</label>
-                                        <Input name="url" type="url" value={formData.url} onChange={handleInputChange} required />
-                                        <p className="text-xs text-text-tertiary font-jetbrains-mono mt-2">Public-facing platform.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 items-start">
-                                        <label className="text-sm font-bold text-white pt-2">07. Monthly Reach</label>
-                                        <Input name="reach" type="number" value={formData.reach} onChange={handleInputChange} required />
-                                        <p className="text-xs text-text-tertiary font-jetbrains-mono mt-2">Unique Visitors / Active Users.</p>
-                                    </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-4 items-start">
-                                        <label className="text-sm font-bold text-white pt-2">08. Audience Profile</label>
-                                        <Input name="audience" value={formData.audience} onChange={handleInputChange} required />
-                                        <p className="text-xs text-text-tertiary font-jetbrains-mono mt-2">Define your core demographic.</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Section 3 */}
-                            <div>
-                                <h3 className="font-orbitron text-xl text-neon-surge mb-6 pb-3 border-b border-[#333] uppercase">
-                                    SECTION 3: PROTOCOL ALIGNMENT // THE MISSION
-                                </h3>
-                                <label className="text-sm font-bold text-white block mb-2">MANDATORY STRATEGY STATEMENT (MAX 100 WORDS)</label>
-                                <p className="text-sm text-text-secondary mb-4">Outline your tactical strategy for promoting ZapWay's Total Protocol Secured Volume (TPSV) value proposition. Focus on how you will leverage our Verifiable Math advantage against opaque traditional systems. Why are you an Architect (T4) partner?</p>
-                                <Input as="textarea" name="strategy" value={formData.strategy} onChange={handleInputChange} rows={5} maxLength={500} required className="max-w-full" />
-                                <p className="text-right text-xs font-jetbrains-mono text-text-tertiary mt-1">{formData.strategy.length} / 500 chars</p>
-                            </div>
-
-                            {/* Confirmation */}
-                            <div>
-                                <h3 className="font-orbitron text-xl text-neon-surge mb-6 pb-3 border-b border-[#333] uppercase">
-                                    DEPLOYMENT CONFIRMATION
-                                </h3>
-                                <div className="space-y-5 bg-foundation p-6 rounded-lg border border-neon-surge/30 shadow-md">
-                                    <Toggle
-                                        checked={formData.dataAccuracy}
-                                        onChange={(val) => handleToggleChange('dataAccuracy', val)}
-                                        label={<span className="font-bold uppercase text-white">DATA ACCURACY ATTESTATION</span>}
-                                        description={<span className="font-jetbrains-mono text-xs">I confirm that all provided data is accurate and verifiable.</span>}
-                                    />
-                                    <div className="h-px bg-[#333]/50 w-full"></div>
-                                    <Toggle
-                                        checked={formData.consent}
-                                        onChange={(val) => handleToggleChange('consent', val)}
-                                        label={<span className="font-bold uppercase text-white">CONSENT & COMPLIANCE AGREEMENT</span>}
-                                        description={<span className="font-jetbrains-mono text-xs">I align with ZapWay's zero-tolerance policy on illicit activity and our commitment to regulatory compliance.</span>}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Submit */}
-                            <div className="pt-6">
-                                <Button type="submit" size="lg" className="w-full shadow-neon-glow-lg uppercase tracking-widest" loading={isLoading} disabled={isLoading || !formData.dataAccuracy || !formData.consent}>
-                                    SUBMIT & AWAIT PROTOCOL VERIFICATION
-                                </Button>
                             </div>
                         </form>
                     </Card>
                 </section>
             )}
-
         </div>
     );
 };

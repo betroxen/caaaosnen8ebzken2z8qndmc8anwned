@@ -19,7 +19,7 @@ const MethodologySection: React.FC<{ icon: React.FC<any>; title: string; subtitl
 
 const ReviewMethodologyPage: React.FC = () => {
     return (
-        <div className="animate-fadeIn max-w-5xl mx-auto">
+        <div className="animate-fadeIn">
             <header className="text-center mb-16">
                 <h1 className="font-orbitron text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
                     ZAPWAY // <span className="text-neon-surge">VETTING METHODOLOGY</span>

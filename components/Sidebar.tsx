@@ -47,12 +47,19 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
     const appContext = useContext(AppContext);
+    
+    if (!appContext) return null;
+
+    const { currentPage, setCurrentPage, auth } = appContext;
+    
+    // Do not render sidebar if user is not authenticated.
+    if (auth.status !== 'authenticated') {
+        return null;
+    }
 
     const handleNavClick = (e: React.MouseEvent, page: string) => {
         e.preventDefault();
-        if (appContext?.setCurrentPage) {
-            appContext.setCurrentPage(page);
-        }
+        setCurrentPage(page);
         setIsMobileOpen(false);
     }
 
@@ -68,157 +75,124 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, setIsCollapsed, i
              <div className="flex items-center gap-4 mb-4">
                 <div className="relative">
                     <img
-                    src="https://placehold.co/56x56/00FFC0/000000?text=DG"
-                    alt="Profile"
-                    className="h-14 w-14 rounded-xl border border-[#333]"
+                        src="https://placehold.co/56x56/00FFC0/000000?text=DG"
+                        alt="Profile"
+                        className="h-14 w-14 rounded-md ring-1 ring-[#333333]"
                     />
-                    <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-neon-surge rounded-full border-4 border-foundation-light"></div>
-                </div>
-                <div>
-                    <div className="font-orbitron text-white uppercase text-sm tracking-wider">DegenGambler</div>
-                    <div className="text-[10px] font-jetbrains-mono text-neon-surge flex items-center gap-2 mt-1">
-                        <Icons.Shield className="h-3 w-3" /> LVL 42 OPERATOR
+                     <div className="absolute -bottom-1 -right-1 bg-foundation p-0.5 rounded-full">
+                         <div className="bg-neon-surge p-1 rounded-full shadow-[0_0_10px_rgba(0,255,192,0.5)]" title="Circuit Status: Online">
+                            <Icons.Zap className="w-3 h-3 text-black fill-black" />
+                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-jetbrains-mono text-text-tertiary uppercase">
-                    <span>XP TO NEXT LEVEL</span>
-                    <span className="text-white">4,250 / 5,000</span>
+                <div>
+                    <p className="text-sm font-bold text-white font-orbitron uppercase">DegenGambler</p>
+                    <p className="text-[10px] text-neon-surge font-jetbrains-mono flex items-center gap-1 mt-1">
+                        LVL 42 OPERATOR
+                    </p>
                 </div>
-                <ProgressBar progress={85} className="h-1.5 bg-foundation" />
-            </div>
+             </div>
+             <div className="text-xs font-jetbrains-mono text-text-secondary space-y-2">
+                 <div className="flex justify-between items-center">
+                    <span>PROGRESS</span>
+                    <span className="text-white">4,250 / 5,000 XP</span>
+                 </div>
+                 <ProgressBar progress={85} />
+             </div>
         </div>
     );
 
     return (
-    <>
-      {/* === MOBILE DRAWER === */}
-      <div 
-        className={`fixed inset-0 top-16 z-[80] bg-black/60 backdrop-blur-sm md:hidden transition-opacity duration-300 ease-in-out ${isMobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} 
-        onClick={() => setIsMobileOpen(false)} 
-        aria-hidden="true" 
-      />
-
-      <div className={`fixed left-0 top-16 bottom-0 z-[90] w-[85vw] max-w-[300px] md:hidden transform transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-         <div className="h-full flex flex-col bg-foundation border-r border-[#333] shadow-2xl">
-             <div className="shrink-0">
-                 {/* FIX: Correctly check authentication status from the auth object in the context. */}
-                 {appContext?.auth.status === 'authenticated' && <MobilePilotSummary />}
-             </div>
-
-             <div className="flex-1 overflow-y-auto custom-scrollbar py-4">
-                <nav className="flex flex-col gap-6">
-                    {sidebarNavItems.map((group) => (
-                    <div key={group.group}>
-                        <h3 className="font-jetbrains-mono text-[10px] uppercase tracking-widest text-text-tertiary mb-2 ml-5">
-                             // {groupLabels[group.group] || group.group}
-                        </h3>
-                        <div className="flex flex-col gap-px">
-                        {group.items.map((item) => (
-                            <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed: false }}>
-                                <SidebarLink
-                                    href={item.href}
-                                    icon={item.icon}
-                                    isMobile={true}
-                                    onClick={(e) => handleNavClick(e, item.title)}
-                                >
-                                    {item.title}
-                                </SidebarLink>
-                            </SidebarContext.Provider>
-                        ))}
-                        </div>
+        <>
+            {/* Mobile Overlay & Sidebar */}
+            <div
+                className={`fixed inset-0 z-50 bg-black/80 backdrop-blur-sm md:hidden transition-opacity duration-300 ${isMobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={() => setIsMobileOpen(false)}
+                aria-hidden="true"
+            />
+            <aside
+                className={`fixed top-0 left-0 z-50 h-full w-72 bg-foundation border-r border-neon-surge/30 flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] md:hidden ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+            >
+                <div className="flex h-16 items-center justify-between border-b border-[#333] px-4">
+                    <div className="flex items-center gap-3" onClick={() => { setCurrentPage('Dashboard'); setIsMobileOpen(false); }}>
+                        <ZapLogo />
+                        <span className="font-orbitron text-xl font-bold text-white tracking-wider">ZAP</span>
                     </div>
-                    ))}
-                </nav>
-             </div>
-
-             <div className="shrink-0 p-4 border-t border-[#333] bg-foundation pb-[calc(1rem+env(safe-area-inset-bottom))]">
-                <Button
-                    variant="ghost"
-                    className="w-full font-orbitron uppercase text-xs tracking-wider text-text-secondary hover:text-white border border-[#333] hover:bg-foundation-light h-11"
-                    onClick={() => setIsMobileOpen(false)}
-                >
-                    <Icons.X className="h-4 w-4 mr-2" /> CLOSE TERMINAL
-                </Button>
-             </div>
-         </div>
-      </div>
-
-      {/* === DESKTOP SIDEBAR === */}
-      <aside 
-        className={`hidden md:flex fixed left-0 top-0 bottom-0 flex-col flex-shrink-0 border-r border-[#333] bg-foundation transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] z-40
-        ${isCollapsed ? 'w-[72px]' : 'w-64'}`}
-      >
-        <div className="flex items-center h-16 shrink-0 px-4 border-b border-[#333]">
-          <button onClick={() => appContext?.setCurrentPage('Dashboard')} className="flex items-center gap-3 group w-full">
-            <ZapLogo iconClassName="h-6 w-6" className="p-2"/>
-            {!isCollapsed && <span className="font-orbitron text-xl font-bold text-white tracking-wider group-hover:text-neon-surge transition-colors">ZAP</span>}
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto custom-scrollbar py-6">
-            {!isCollapsed && (
-                <div className="px-4 mb-6">
-                     <div className="relative group">
-                        <Icons.Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary h-4 w-4 group-focus-within:text-neon-surge transition-colors" />
-                        <Input placeholder="SEARCH INTEL..." className="pl-9 bg-foundation-light border-[#333] text-xs font-jetbrains-mono h-9 focus:border-neon-surge transition-all" />
-                    </div>
-                </div>
-            )}
-             {isCollapsed && (
-                <div className="flex justify-center mb-6">
-                    <button className="p-2 text-text-tertiary hover:text-white bg-foundation-light rounded-md border border-[#333] hover:border-neon-surge transition-all">
-                         <Icons.Search className="h-4 w-4" />
+                    <button onClick={() => setIsMobileOpen(false)} className="text-text-tertiary hover:text-white p-2">
+                        <Icons.X className="h-5 w-5" />
                     </button>
                 </div>
-            )}
+                
+                <MobilePilotSummary />
 
-            <nav className="flex flex-col gap-4">
-                {sidebarNavItems.map((group) => (
-                <div key={group.group}>
-                    {!isCollapsed && (
-                    <h3 className="font-jetbrains-mono text-[10px] uppercase tracking-widest text-text-tertiary px-6 mb-2">
-                        // {groupLabels[group.group] || group.group}
-                    </h3>
-                    )}
-                    <div className="flex flex-col gap-px">
-                    {group.items.map((item) => (
-                        <SidebarContext.Provider key={item.title} value={{ isActive: appContext?.currentPage === item.title, isCollapsed }}>
-                        <SidebarLink
-                            href={item.href}
-                            icon={item.icon}
-                            onClick={(e) => handleNavClick(e, item.title)}
-                        >
-                            {item.title}
-                        </SidebarLink>
-                        </SidebarContext.Provider>
-                    ))}
+                <nav className="flex-1 overflow-y-auto custom-scrollbar py-6">
+                    <ul className="flex flex-col gap-y-1">
+                        {sidebarNavItems.map(group => (
+                            <li key={group.group}>
+                                <h2 className="px-5 mt-4 mb-2 text-xs font-jetbrains-mono text-text-tertiary uppercase tracking-wider">{groupLabels[group.group]}</h2>
+                                <ul className="flex flex-col gap-y-1">
+                                    {group.items.map(item => (
+                                        <li key={item.title}>
+                                            <SidebarContext.Provider value={{ isActive: currentPage === item.title, isCollapsed: false }}>
+                                                <SidebarLink href={item.href} icon={item.icon} isMobile={true} onClick={(e) => handleNavClick(e, item.title)}>
+                                                    {item.title}
+                                                </SidebarLink>
+                                            </SidebarContext.Provider>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </aside>
+
+            {/* Desktop Sidebar */}
+            <aside
+                className={`hidden md:fixed md:left-0 md:top-0 md:z-40 md:flex md:h-screen md:flex-col border-r border-[#333] bg-foundation transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]`}
+                style={{ width: isCollapsed ? '72px' : '256px' }}
+            >
+                <div className={`flex h-16 items-center border-b border-[#333] transition-all duration-300 ${isCollapsed ? 'justify-center' : 'px-6'}`}>
+                    <div
+                        className="flex items-center gap-3 cursor-pointer group"
+                        onClick={() => setCurrentPage('Dashboard')}
+                    >
+                        <ZapLogo />
+                        {!isCollapsed && <span className="font-orbitron text-xl font-bold text-white tracking-wider group-hover:text-glow">ZAP</span>}
                     </div>
                 </div>
-                ))}
-            </nav>
-        </div>
 
-        <div className={`shrink-0 border-t border-[#333] bg-foundation p-2 flex ${isCollapsed ? 'justify-center' : 'justify-start'} items-center`}>
-             <Button
-                variant="ghost"
-                size="sm"
-                className={`text-text-secondary hover:text-white border border-transparent hover:border-[#333] transition-all ${isCollapsed ? 'px-0 w-12 h-12 flex items-center justify-center' : 'w-full flex items-center justify-start gap-2 h-12'}`}
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                title={isCollapsed ? "Expand" : "Collapse"}
-            >
-                {isCollapsed ? (
-                    <Icons.ChevronRight className="h-5 w-5" />
-                ) : (
-                    <>
-                        <Icons.ChevronLeft className="h-5 w-5" />
-                        <span className="font-orbitron uppercase text-xs tracking-wider">COLLAPSE</span>
-                    </>
-                )}
-            </Button>
-        </div>
-      </aside>
-    </>
-  );
+                <nav className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar pt-6 pb-20">
+                    <ul className="flex flex-col gap-y-1">
+                        {sidebarNavItems.map(group => (
+                            <li key={group.group}>
+                                {!isCollapsed && <h2 className="px-4 mt-4 mb-2 text-xs font-jetbrains-mono text-text-tertiary uppercase tracking-wider">{groupLabels[group.group]}</h2>}
+                                <ul className="flex flex-col gap-y-1">
+                                    {group.items.map(item => (
+                                        <li key={item.title}>
+                                            <SidebarContext.Provider value={{ isActive: currentPage === item.title, isCollapsed }}>
+                                                <SidebarLink href={item.href} icon={item.icon} onClick={(e) => handleNavClick(e, item.title)}>
+                                                    {item.title}
+                                                </SidebarLink>
+                                            </SidebarContext.Provider>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+
+                <div className={`mt-auto border-t border-[#333] transition-all duration-300 ${isCollapsed ? 'py-3' : 'p-4'}`}>
+                    <button
+                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        className={`flex w-full items-center gap-3 text-sm text-text-secondary hover:bg-foundation-light hover:text-white rounded-md transition-colors ${isCollapsed ? 'justify-center py-2' : 'p-3'}`}
+                    >
+                        {isCollapsed ? <Icons.ChevronRight className="h-4 w-4" /> : <Icons.ChevronLeft className="h-4 w-4" />}
+                        {!isCollapsed && <span className="font-orbitron uppercase text-xs">Collapse</span>}
+                    </button>
+                </div>
+            </aside>
+        </>
+    );
 };
